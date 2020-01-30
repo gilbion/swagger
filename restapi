@@ -1,0 +1,86 @@
+swagger: "2.0"
+info:
+  description: "Rest API da Caneta Azul Créditos"
+  version: "1.0.0"
+  title: "Caneta Azul Créditos"
+  contact:
+    email: "gilbion@gmail.com"
+
+host: "canetaazul.com.br"
+basePath: "/credito"
+tags:
+- name: "busca"
+  description: "Realizar buscas dentro da base de dados"
+- name: "store"
+  description: "Access to Petstore orders"
+- name: "user"
+  description: "Operations about user"
+schemes:
+- "https"
+paths:
+  /buscarCPF/{CPF}:
+    get:
+      tags:
+      - "busca"
+      summary: "Busca um cliente no data lake pelo CPF"
+      description: ""
+      operationId: "buscaCPF"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "CPF"
+        in: "path"
+        description: "CPF a ser buscado"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        404:
+          description: "CPF não encontrado"
+      security:
+      - canetaazul_auth:
+        - "read:user"
+  /buscarCNPJ:
+    post:
+      tags:
+      - "busca"
+      summary: "Busca um cliente no data lake pelo CNPJ"
+      description: ""
+      operationId: "buscaCNPJ"
+      consumes:
+      - "application/x-www-form-urlencoded"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "CNPJ"
+        in: "body"
+        description: "CNPJ a ser buscado"
+        required: true
+        schema: 
+           $ref: '#/definitions/ConsultaCNPJ'
+      responses:
+        404:
+          description: "CNPJ não encontrado"
+      security:
+      - canetaazul_auth:
+        - "read:user"
+securityDefinitions:
+  canetaazul_auth:
+    type: "oauth2"
+    authorizationUrl: "http://canetaazul.com.br/oauth/dialog"
+    flow: "implicit"
+    scopes:
+      read:user: "Acesso para busca de usuarios"
+  api_key:
+    type: "apiKey"
+    name: "api_key"
+    in: "header"
+definitions:
+  ConsultaCNPJ:
+    type: "object"
+    properties:
+      CPF:
+        type: "string"
+        pattern: '^\d{2}.\d{3}.\d{3}/\d{4}-\d{2}$'
