@@ -39,6 +39,10 @@ paths:
       responses:
         404:
           description: "CPF não encontrado"
+        200:
+          description: "usuario encontrado"
+          schema:
+            $ref: '#/definitions/DadosUser'
       security:
       - canetaazul_auth:
         - "read:user"
@@ -61,6 +65,10 @@ paths:
         schema: 
            $ref: '#/definitions/ConsultaCNPJ'
       responses:
+        200:
+          description: "usuario encontrado"
+          schema:
+            $ref: '#/definitions/DadosEmpresa'
         404:
           description: "CNPJ não encontrado"
       security:
@@ -84,3 +92,45 @@ definitions:
       CPF:
         type: "string"
         pattern: '^\d{2}.\d{3}.\d{3}/\d{4}-\d{2}$'
+  DadosUser:
+    type: "object"
+    properties:
+      idUser:
+        type: "integer"
+        format: "int32"
+      firstName:
+        type: "string"
+      LastName:
+        type: "string"
+      endereco:
+        type: "string"
+      telefone:
+        type: "string"
+        pattern: '^(\d{2}) \d{4}-\d{4}$'
+      celular:
+        type: "string"
+        pattern: '^(\d{2}) \d{5}-\d{4}$'
+      nomeMae:
+        type: "string"
+      email:
+        type: "string"
+  DadosEmpresa:
+    type: "object"
+    properties:
+      idEmpresa:
+        type: "integer"
+        format: "int32"
+      razaoSocial:
+        type: "string"
+      endereco:
+        type: "string"
+      telefone:
+        type: "string"
+        pattern: '^(\d{2}) \d{4}-\d{4}$'
+      quadroSocial:
+        type: "string"
+      site:
+        type: "string"
+      dataFundaca:
+        type: "string"
+        format: "date"
